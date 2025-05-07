@@ -18,11 +18,6 @@
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
                     <th><?= $this->Paginator->sort('status') ?></th>
-                    <th><?= $this->Paginator->sort('last_login') ?></th>
-                    <th><?= $this->Paginator->sort('token_expires') ?></th>
-                    <th><?= $this->Paginator->sort('activation_date') ?></th>
-                    <th><?= $this->Paginator->sort('reset_token') ?></th>
-                    <th><?= $this->Paginator->sort('reset_expires') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -36,11 +31,6 @@
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
                     <td><?= h($user->status) ?></td>
-                    <td><?= h($user->last_login) ?></td>
-                    <td><?= h($user->token_expires) ?></td>
-                    <td><?= h($user->activation_date) ?></td>
-                    <td><?= h($user->reset_token) ?></td>
-                    <td><?= h($user->reset_expires) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>

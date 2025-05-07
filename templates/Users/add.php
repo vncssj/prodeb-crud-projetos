@@ -19,15 +19,7 @@
                 <?php
                     echo $this->Form->control('username');
                     echo $this->Form->control('email');
-                    echo $this->Form->control('password');
-                    echo $this->Form->control('role');
-                    echo $this->Form->control('status');
-                    echo $this->Form->control('last_login', ['empty' => true]);
-                    echo $this->Form->control('token');
-                    echo $this->Form->control('token_expires', ['empty' => true]);
-                    echo $this->Form->control('activation_date', ['empty' => true]);
-                    echo $this->Form->control('reset_token');
-                    echo $this->Form->control('reset_expires', ['empty' => true]);
+                    echo $this->Form->control('password');                   
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
