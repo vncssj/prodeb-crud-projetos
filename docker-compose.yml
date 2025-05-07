@@ -8,15 +8,15 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=mysql://root:root@db/cakephp5
+      - DATABASE_URL=mysql://root:root@db/projetos
 
   db:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: cakephp5
-      MYSQL_USER: cakephp
-      MYSQL_PASSWORD: cakephp
+      MYSQL_DATABASE: projetos
+      MYSQL_USER: usr_projetos
+      MYSQL_PASSWORD: usr_projetos
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
