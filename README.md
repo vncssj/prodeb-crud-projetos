@@ -1,53 +1,45 @@
-# CakePHP Application Skeleton
+# CRUD Projetos
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=5.x)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
-
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 5.x.
-
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
-
-## Installation
-
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
+Aplicação desenvolvida utilizando Cakephp 5, e uma base de dados MySQL.
+Para executar a aplicação em ambiente local usando o Docker Compose execute:
 
 ```bash
-composer create-project --prefer-dist cakephp/app
+docker compose up
 ```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
-
+note: a utilização de docker compose para gerenciamento de containers em ambientes de produção não é o mais indicado, o uso de volumes irá sobrescrever as dependencias instaladas pelo composer, portanto será necessário executar o composer install após a execução do container.
+Para executar instalar as dependencias por dentro do container use:
 ```bash
-composer create-project --prefer-dist cakephp/app myapp
+docker exec -it IdDoContainerPHP bash
+composer install
 ```
-
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
-
+Ou dentro do diretorio da sua maquina caso tenha o ambiente de desenvolvimento configurado, use:
 ```bash
-bin/cake server -p 8765
+composer install
 ```
+**A instalação das dependencias não é necessária quando não há uso de volumes, ou seja sem utilizar o docker compose.**
 
-Then visit `http://localhost:8765` to see the welcome page.
+### **História de Usuário: CRUD de Projetos**
 
-## Update
+**Como** usuário autenticado,  
+**Quero** criar, visualizar, editar e excluir projetos no sistema,  
+**Para** organizar e gerenciar as informações de cada projeto de forma eficiente.
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+#### **Critérios de Aceitação:**
+- O sistema deve **restringir o acesso** à tela de gerenciamento de projetos apenas para usuários autenticados.
+- O sistema deve permitir a **criação** de um projeto informando os atributos necessários.
+- O sistema deve permitir a **edição** dos atributos de um projeto já cadastrado.
+- O sistema deve permitir a **visualização** de um projeto específico e a listagem de todos os projetos.
+- O sistema deve permitir a **exclusão** de um projeto, garantindo que não haja dependências que impeçam a remoção.
+- As ações de **criação** e **edição** devem validar campos obrigatórios e evitar duplicidades, conforme regras de negócio.
+- O sistema deve garantir que apenas usuários autorizados possam criar, editar ou excluir projetos.
+- Deve ser possível pesquisar projetos pelo nome ou outros critérios relevantes.
 
-## Configuration
-
-Read and edit the environment specific `config/app_local.php` and set up the
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
-
-## Layout
-
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+#### **Regras de Negócio:**
+1. **Autenticação obrigatória**: Somente usuários autenticados podem acessar a tela de gerenciamento de projetos.
+2. **Atributos do Projeto**:
+   - **Nome do projeto**: Obrigatório e único.
+   - **Descrição do projeto**: Opcional.
+   - **Status do projeto**: Pode ser **Ativo** ou **Inativo**.
+   - **Orçamento disponível**: Opcional.
+3. A criação e edição de projetos devem respeitar as permissões do usuário logado.
+4. A exclusão de um projeto só deve ser permitida se não houver registros dependentes associados.
