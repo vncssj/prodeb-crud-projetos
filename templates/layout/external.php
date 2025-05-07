@@ -37,17 +37,6 @@ $cakeDescription = 'CRUD Projetos';
 </head>
 
 <body>
-    <nav class="top-nav">
-        <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>">CRUD Projetos</a>
-        </div>
-        <div class="top-nav-links">
-            <a href="<?= $this->Url->build('/projects') ?>" class="text-danger">Projetcs</a>
-            <a href="<?= $this->Url->build('/users') ?>">Users</a>
-        </div>
-        <a href="<?= $this->Url->build('/users/my-profile/'.$this->getRequest()->getSession()->read('Auth.id')) ?>">My Profile</a>
-        <a href="<?= $this->Url->build('/users/logout') ?>">Sair</a>
-    </nav>
     <main class="main">
         <div class="container">
             <?= $this->Flash->render() ?>

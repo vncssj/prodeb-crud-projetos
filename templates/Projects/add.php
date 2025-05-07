@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Project $project
@@ -17,10 +18,10 @@
             <fieldset>
                 <legend><?= __('Add Project') ?></legend>
                 <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('status');
-                    echo $this->Form->control('budget');
+                echo $this->Form->control('name');
+                echo $this->Form->control('description');
+                echo $this->Form->control('status', ['options' => ['Change' => '', 'active' => 'active', 'inactive' => 'inactive']]);
+                echo $this->Form->control('budget');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

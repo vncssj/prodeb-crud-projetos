@@ -24,7 +24,7 @@
                 <?php
                     echo $this->Form->control('name');
                     echo $this->Form->control('description');
-                    echo $this->Form->control('status');
+                    echo $this->Form->control('status', ['options' => ['active' => 'active', 'inactive' => 'inactive']]);
                     echo $this->Form->control('budget');
                 ?>
             </fieldset>

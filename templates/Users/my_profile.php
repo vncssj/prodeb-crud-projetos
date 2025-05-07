@@ -5,7 +5,7 @@
  */
 ?>
 <div class="row">
-    <div class="column column-80">
+    <div class="column">
         <div class="users form content">
             <?= $this->Form->create($user) ?>
             <fieldset>

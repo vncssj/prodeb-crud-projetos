@@ -15,7 +15,7 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['login', 'myProfile']);
+        $this->Authentication->allowUnauthenticated(['login']);
     }
 
     /**
@@ -74,6 +74,10 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, contain: []);
+        if ($this->Authentication->getIdentity()->get('role') !== 'admin') {
+            $this->Flash->error(__('You don\'t have permission!'));
+            return $this->redirect($this->referer());
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
@@ -110,6 +114,10 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        if ($this->Authentication->getIdentity()->get('role') !== 'admin') {
+            $this->Flash->error(__('You don\'t have permission!'));
+            return $this->redirect($this->referer());
+        }
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
@@ -124,7 +132,6 @@ class UsersController extends AppController
     public function login()
     {
         $result = $this->Authentication->getResult();
-        // If the user is logged in send them away.
         if ($result && $result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? '/home';
             return $this->redirect($target);
@@ -132,6 +139,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $this->Flash->error('Invalid username or password');
         }
+        $this->viewBuilder()->setLayout('external');
     }
     public function logout()
     {

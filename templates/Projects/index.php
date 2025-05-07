@@ -15,8 +15,6 @@
                     <th><?= $this->Paginator->sort('name') ?></th>
                     <th><?= $this->Paginator->sort('status') ?></th>
                     <th><?= $this->Paginator->sort('budget') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -27,8 +25,6 @@
                     <td><?= h($project->name) ?></td>
                     <td><?= h($project->status) ?></td>
                     <td><?= $project->budget === null ? '' : $this->Number->format($project->budget) ?></td>
-                    <td><?= h($project->created) ?></td>
-                    <td><?= h($project->modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $project->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $project->id]) ?>
