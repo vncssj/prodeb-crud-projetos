@@ -17,6 +17,23 @@ Ou dentro do diretorio da sua maquina caso tenha o ambiente de desenvolvimento c
 composer install
 ```
 **A instalação das dependencias não é necessária quando não há uso de volumes, ou seja sem utilizar o docker compose.**
+##
+Para restaurar o dump do banco de dados faça:
+
+Para copiar o dump pra dentro do container:
+```bash
+docker cp dump.sql idDoContainerMysql:/dump.sql
+```
+
+Para acessar o container
+```bash
+docker exec -it idDoContainerMysql bash
+```
+
+Para restaurar o dump no banco de dados existente
+```bash
+mysql -u root -p projetos < dump.sql
+```
 
 ### **História de Usuário: CRUD de Projetos**
 
