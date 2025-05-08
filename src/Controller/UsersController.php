@@ -15,7 +15,7 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['login', 'add']);
     }
 
     /**
@@ -62,6 +62,7 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
+        $this->viewBuilder()->setLayout('external');
     }
 
     /**
@@ -134,7 +135,7 @@ class UsersController extends AppController
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? '/home';
-            return $this->redirect($target);
+            return $this->redirect('/');
         }
         if ($this->request->is('post')) {
             $this->Flash->error('Invalid username or password');

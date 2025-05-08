@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Task $task
@@ -7,25 +8,34 @@
  */
 ?>
 <div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Tasks'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column column-80">
+    <div class="column">
         <div class="tasks form content">
             <?= $this->Form->create($task) ?>
             <fieldset>
                 <legend><?= __('Add Task') ?></legend>
+                <div class="row">
+                    <div class="column">
+                        <?= $this->Form->control('title'); ?>
+                    </div>
+                    <div class="column">
+                        <?= $this->Form->control('predecessor_task_id', ['options' => $predecessorTasks, 'empty' => true]); ?>
+                    </div>
+                    <div class="column">
+                        <?= $this->Form->control('project_id', ['options' => $projects]); ?>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="column">
+                        <?= $this->Form->control('start_date', ['empty' => true]); ?>
+                    </div>
+                    <div class="column">
+                        <?= $this->Form->control('end_date', ['empty' => true]); ?>
+                    </div>
+                </div>
                 <?php
-                    echo $this->Form->control('title');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('project_id', ['options' => $projects]);
-                    echo $this->Form->control('start_date', ['empty' => true]);
-                    echo $this->Form->control('end_date', ['empty' => true]);
-                    echo $this->Form->control('predecessor_task_id', ['options' => $predecessorTasks, 'empty' => true]);
-                    echo $this->Form->control('status');
+                echo $this->Form->control('description');
+                // echo $this->Form->control('status', ['options' => ['Completed' => 'Completed', 'Not Completed' => 'Not Completed'], 'empty' => true]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

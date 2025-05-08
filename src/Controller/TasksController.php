@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -19,9 +20,16 @@ class TasksController extends AppController
     {
         $query = $this->Tasks->find()
             ->contain(['Projects', 'PredecessorTasks']);
+            if (!is_null($this->request->getQuery('project_id')) && !empty($this->request->getQuery('project_id'))) {
+                $query->where(['Tasks.project_id' => $this->request->getQuery('project_id')]);
+            }
+            if (!is_null($this->request->getQuery('status')) && !empty($this->request->getQuery('status'))) {
+                $query->where(['Tasks.status' => $this->request->getQuery('status')]);
+            }
         $tasks = $this->paginate($query);
+        $projects = $this->fetchTable('Projects')->find('list');
 
-        $this->set(compact('tasks'));
+        $this->set(compact('tasks', 'projects'));
     }
 
     /**
@@ -47,6 +55,11 @@ class TasksController extends AppController
         $task = $this->Tasks->newEmptyEntity();
         if ($this->request->is('post')) {
             $task = $this->Tasks->patchEntity($task, $this->request->getData());
+            if ($task->isDirty('status') && $this->Authentication->getIdentity()->get('role') !== 'admin') {
+                $this->Flash->error(__('You don\'t have permission to set status.'));
+                return $this->redirect($this->referer());
+            }
+
             if ($this->Tasks->save($task)) {
                 $this->Flash->success(__('The task has been saved.'));
 
@@ -71,6 +84,12 @@ class TasksController extends AppController
         $task = $this->Tasks->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $task = $this->Tasks->patchEntity($task, $this->request->getData());
+
+            if ($task->isDirty('status') && $this->Authentication->getIdentity()->get('role') !== 'admin') {
+                $this->Flash->error(__('You hasn\'t permission to set status.'));
+                return $this->redirect($this->referer());
+            }
+
             if ($this->Tasks->save($task)) {
                 $this->Flash->success(__('The task has been saved.'));
 
@@ -94,6 +113,12 @@ class TasksController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $task = $this->Tasks->get($id);
+
+        if (!$this->Tasks->canDelete($id)) {
+            $this->Flash->error(__('The task could not be deleted. It\'s the predecessor of another task.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Tasks->delete($task)) {
             $this->Flash->success(__('The task has been deleted.'));
         } else {
