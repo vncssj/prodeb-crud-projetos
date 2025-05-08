@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -32,7 +33,7 @@ class ProjectsController extends AppController
      */
     public function view($id = null)
     {
-        $project = $this->Projects->get($id, contain: []);
+        $project = $this->Projects->get($id, contain: ['Tasks']);
         $this->set(compact('project'));
     }
 
@@ -89,6 +90,12 @@ class ProjectsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $project = $this->Projects->get($id);
+
+        if (!$this->Projects->canDelete($id)) {
+            $this->Flash->error(__('The project could not be deleted. There\'re one or more related tasks.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->Projects->delete($project)) {
             $this->Flash->success(__('The project has been deleted.'));
         } else {

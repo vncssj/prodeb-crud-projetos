@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -44,6 +45,11 @@ class ProjectsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Tasks', [
+            'foreignKey' => 'project_id',
+            'joinType' => 'INNER',
+        ]);
     }
 
     /**
@@ -88,5 +94,14 @@ class ProjectsTable extends Table
         $rules->add($rules->isUnique(['name']), ['errorField' => 'name']);
 
         return $rules;
+    }
+
+    public function canDelete($projectId)
+    {
+        $tasksCount = $this->Tasks->find()
+            ->where(['project_id' => $projectId])
+            ->count();
+
+        return $tasksCount === 0;
     }
 }

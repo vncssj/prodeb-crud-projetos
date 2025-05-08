@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -43,7 +44,7 @@ class TasksTable extends Table
         parent::initialize($config);
 
         $this->setTable('tasks');
-        $this->setDisplayField('description');
+        $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -96,6 +97,16 @@ class TasksTable extends Table
             ->scalar('status')
             ->allowEmptyString('status');
 
+        $validator->add('end_date', 'custom', [
+            'rule' => function ($value, $context) {
+                if (!empty($context['data']['start_date']) && !empty($value)) {
+                    return $value >= $context['data']['start_date'];
+                }
+                return true;
+            },
+            'message' => 'A data de término não pode ser anterior à data de início'
+        ]);
+
         return $validator;
     }
 
@@ -112,5 +123,13 @@ class TasksTable extends Table
         $rules->add($rules->existsIn(['predecessor_task_id'], 'PredecessorTasks'), ['errorField' => 'predecessor_task_id']);
 
         return $rules;
+    }
+
+    public function canDelete($taskId)
+    {
+        return !$this->exists([
+            'predecessor_task_id' => $taskId,
+            'id !=' => $taskId
+        ]);
     }
 }

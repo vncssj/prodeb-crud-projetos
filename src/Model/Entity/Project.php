@@ -34,5 +34,6 @@ class Project extends Entity
         'budget' => true,
         'created' => true,
         'modified' => true,
+        'tasks' => true
     ];
 }
