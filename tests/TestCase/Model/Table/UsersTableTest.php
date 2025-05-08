@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
@@ -59,7 +60,68 @@ class UsersTableTest extends TestCase
      */
     public function testValidationDefault(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // Teste com dados válidos
+        $validData = [
+            'username' => 'usuario_valido',
+            'email' => 'email@valido.com',
+            'password' => 'senhaSegura123',
+        ];
+
+        $user = $this->Users->newEntity($validData);
+        $this->assertEmpty($user->getErrors());
+
+        // Testar username obrigatório
+        $noUsername = $validData;
+        unset($noUsername['username']);
+        $user = $this->Users->newEntity($noUsername);
+        $this->assertArrayHasKey('username', $user->getErrors());
+
+        // Testar email inválido
+        $invalidEmail = $validData;
+        $invalidEmail['email'] = 'email-invalido';
+        $user = $this->Users->newEntity($invalidEmail);
+        $this->assertArrayHasKey('email', $user->getErrors());
+
+        // Testar senha curta
+        $shortPassword = $validData;
+        $shortPassword['password'] = '123';
+        $user = $this->Users->newEntity($shortPassword);
+        $this->assertArrayHasKey('password', $user->getErrors());
+    }
+
+    /**
+     * @dataProvider validationDataProvider
+     */
+    public function testValidation($field, $value, $expected): void
+    {
+        $data = [
+            'username' => 'usuario_valido',
+            'email' => 'email@valido.com',
+            'password' => 'senhaSegura123',
+        ];
+
+        $data[$field] = $value;
+        $user = $this->Users->newEntity($data);
+
+        $errors = $user->getErrors();
+        if ($expected) {
+            $this->assertArrayNotHasKey($field, $errors);
+        } else {
+            $this->assertArrayHasKey($field, $errors);
+        }
+    }
+
+    public function validationDataProvider(): array
+    {
+        return [
+            ['username', 'usuario_valido', true],
+            ['username', '', false],
+            ['username', str_repeat('a', 256), false], // muito longo
+            ['email', 'email@valido.com', true],
+            ['email', 'email-invalido', false],
+            ['password', 'senhaSegura123', true],
+            ['password', '123', false], // muito curta
+        ];
     }
 
     /**
